@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,13 +16,53 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function (Request $request) {
+// [GET] /
+Route::get('/', [ApiController::class, 'index']);
 
-    return [
-        'message' => 'Fullstack Challenge 🏅 - Dictionary',
-    ];
+Route::controller(UserController::class)->group(function () {
+
+    // [POST] /auth/signup
+    Route::post('/signup', 'signup');
+
+    // [POST] /auth/signin
+    Route::post('/signin', 'signin');
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware([CacheResponse::class, AuthenticateToken::class])->group(function () {
+
+    Route::controller(ApiController::class)->group(function () {
+
+        Route::prefix('/entries/en')->group(function () {
+
+            // [GET] /entries/en
+            Route::get('/', 'all');
+
+            Route::prefix('/{word}')->group(function () {
+
+                // [GET] /entries/en/:word
+                Route::get('/', 'search');
+
+                // [POST] /entries/en/:word/favorite
+                Route::post('/favorite', 'favorite');
+
+                // [DELETE] /entries/en/:word/unfavorite
+                Route::delete('/unfavorite', 'unfavorite');
+            });
+        });
+    });
+
+    Route::controller(UserController::class)->group(function () {
+
+        Route::prefix('/user/me')->group(function () {
+
+            // [GET] /user/me
+            Route::get('/', 'show');
+
+            // [GET] /user/me/history
+            Route::get('/history', 'history');
+
+            // [GET] /user/me/favorites
+            Route::get('/favorites', 'favorites');
+        });
+    });
 });
