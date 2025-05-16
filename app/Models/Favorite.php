@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Favorites\FavoriteEnum;
-use App\Models\User;
-use App\Models\Words\Word;
+use App\Enums\FavoriteEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,11 +26,17 @@ class Favorite extends Model
         'status' => FavoriteEnum::class,
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function word(): BelongsTo
     {
         return $this->belongsTo(Word::class);

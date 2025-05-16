@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Services\ApiService;
 use App\Services\FavoriteService;
 use App\Services\UserService;
