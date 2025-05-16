@@ -35,9 +35,9 @@ class WordService
 
     /**
      * @param string $word
-     * @return Word|Builder
+     * @return Word|Builder|null
      */
-    public function get(string $word): Word|Builder
+    public function get(string $word): Word|Builder|null
     {
         return $this->wordRepository->get($word);
     }

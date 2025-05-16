@@ -2,11 +2,23 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Collection;
+use Laravel\Passport\HasApiTokens;
+
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property Carbon $created_at
+ * @property-read Collection $histories
+ * @property-read Collection $favorites
+ */
 
 class User extends Authenticatable
 {
@@ -42,4 +54,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * @return HasMany
+     */
+    public function histories(): HasMany
+    {
+        return $this->hasMany(History::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }
